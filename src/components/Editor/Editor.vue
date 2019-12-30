@@ -9,33 +9,6 @@
                     :config="editorConfig"
             ></ckeditor>
         </v-card-text>
-        <v-card-actions v-if="editable">
-            <v-btn
-                    color="primary"
-                    @click="$emit('html', editorData)"
-                    :loading="loadingActions"
-                    :disabled="!disabledActions"
-            >
-                HTML
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-                    color="success"
-                    @click="$emit('update', editorData)"
-                    :loading="loadingActions"
-                    :disabled="!disabledActions"
-            >
-                Save
-            </v-btn>
-            <v-btn
-                    color="error"
-                    @click="$emit('delete')"
-                    :loading="loadingActions"
-                    :disabled="!disabledActions"
-            >
-                Delete
-            </v-btn>
-        </v-card-actions>
         <image-selector
                 v-if="selectImageDialog"
                 @select="selectImage"
@@ -318,15 +291,7 @@
             'editable': {
                 type: Boolean,
                 default: false
-            },
-            'loading-actions': {
-                type: Boolean,
-                default: false
-            },
-            'disabled-actions': {
-                type: Boolean,
-                default: false
-            },
+            }
         },
         components: {
             ImageSelector
@@ -339,6 +304,9 @@
                 } else {
                     this.editorData = '';
                 }
+            },
+            'editorData'() {
+                this.$emit('update:content', this.editorData);
             }
         },
         mounted() {
