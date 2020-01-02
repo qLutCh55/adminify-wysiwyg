@@ -2,6 +2,8 @@ export default class UploadAdapter {
     constructor(loader) {
         // The file loader instance to use during the upload.
         this.loader = loader;
+        this.model = window.ckEditorParams.model;
+        this.modelId = window.ckEditorParams.modelId;
     }
 
     // Starts the upload process.
@@ -29,7 +31,7 @@ export default class UploadAdapter {
         // integration to choose the right communication channel. This example uses
         // a POST request with JSON as a data structure but your configuration
         // could be different.
-        xhr.open('POST', '/images/uploadWithoutAttaching', true);
+        xhr.open('POST', '/images/upload', true);
         xhr.responseType = 'json';
     }
 
@@ -61,20 +63,10 @@ export default class UploadAdapter {
 
             let hash = response.image.hash;
             let extension = response.image.type;
-            // let maxWidth = response.image.width;
-            // let responsiveWidths = ['320', '480', '680', '800', '960', '1280', '1600'];
 
             response.urls = {
                 default: window.location.protocol + '//' + window.location.host + '/images/' + hash + '.' + extension
             };
-
-            // for (let i = 0, len = responsiveWidths.length; i < len; i++) {
-            //     let width = parseInt(responsiveWidths[i]);
-            //
-            //     if (width < maxWidth) {
-            //         response.urls[width] = window.location.protocol + '//' + window.location.host + '/images/' + hash + '-fw=' + width + '.' + extension;
-            //     }
-            // }
 
             resolve(response.urls);
         });
@@ -100,6 +92,14 @@ export default class UploadAdapter {
         data.append('_token', document.head.querySelector('meta[name="csrf-token"]').content);
         data.append('role', 'image');
         data.append('image', file);
+
+        if (this.model) {
+            data.append('model', this.model);
+        }
+
+        if (this.modelId) {
+            data.append('modelId', this.modelId);
+        }
 
         // Important note: This is the right place to implement security mechanisms
         // like authentication and CSRF protection. For instance, you can use

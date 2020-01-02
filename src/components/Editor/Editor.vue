@@ -2,17 +2,19 @@
     <v-card flat>
         <v-card-text v-if="!loading">
             <ckeditor
-                    class="ck-editor-border"
-                    :disabled="!editable"
-                    :editor="editor"
-                    v-model="editorData"
-                    :config="editorConfig"
+                class="ck-editor-border"
+                :disabled="!editable"
+                :editor="editor"
+                v-model="editorData"
+                :config="editorConfig"
             ></ckeditor>
         </v-card-text>
         <image-selector
-                v-if="selectImageDialog"
-                @select="selectImage"
-                @close="closeImageDialog"
+            :model="model"
+            :modelId="modelId"
+            v-if="selectImageDialog"
+            @select="selectImage"
+            @close="closeImageDialog"
         ></image-selector>
     </v-card>
 </template>
@@ -65,8 +67,12 @@
         data() {
             return {
                 loading: true,
+
                 selectImageDialog: false,
+                showOptionsDialog: false,
+
                 tmpEditor: null,
+
                 editor: ClassicEditor,
                 editorData: '',
                 editorConfig: {
@@ -250,6 +256,7 @@
                     },
 
                     toolbar: {
+                        viewportTopOffset: this.topOffset,
                         items: [
                             'heading',
                             '|',
@@ -284,6 +291,15 @@
             }
         },
         props: {
+            'model': {
+                default: null,
+            },
+            'modelId': {
+                default: null,
+            },
+            'images': {
+                default: () => ([])
+            },
             'content': {
                 type: String,
                 default: ''
@@ -291,6 +307,10 @@
             'editable': {
                 type: Boolean,
                 default: false
+            },
+            'topOffset': {
+                type: String,
+                default: '0'
             }
         },
         components: {
@@ -314,6 +334,11 @@
                 this.showImageDialog(e.detail);
             });
 
+            window.ckEditorParams = {
+                model: this.model,
+                modelId: this.modelId
+            };
+
             if (this.content) {
                 this.editorData = this.content;
             } else {
@@ -324,8 +349,8 @@
         },
         methods: {
             showImageDialog(editor) {
-                this.selectImageDialog = true;
                 this.tmpEditor = editor;
+                this.selectImageDialog = true;
             },
             closeImageDialog() {
                 this.selectImageDialog = false;
@@ -335,20 +360,10 @@
                 let editor = this.tmpEditor;
                 let hash = image.hash;
                 let extension = image.type;
-                // let maxWidth = image.width;
-                // let responsiveWidths = ['320', '480', '680', '800', '960', '1280', '1600'];
 
                 let urls = {
                     default: window.location.protocol + '//' + window.location.host + '/images/' + hash + '.' + extension
                 };
-
-                // for (let i = 0, len = responsiveWidths.length; i < len; i++) {
-                //     let width = parseInt(responsiveWidths[i]);
-                //
-                //     if (width < maxWidth) {
-                //         urls[width] = window.location.protocol + '//' + window.location.host + '/images/' + hash + '-fw=' + width + '.' + extension;
-                //     }
-                // }
 
                 editor.model.change(writer => {
 
@@ -356,34 +371,6 @@
                         src: urls.default,
                     });
 
-                    // let maxWidth = 0;
-                    //
-                    // const srcsetAttribute = Object.keys(urls)
-                    // // Filter out keys that are not integers.
-                    //     .filter(key => {
-                    //         const width = parseInt(key, 10);
-                    //
-                    //         if (!isNaN(width)) {
-                    //             maxWidth = Math.max(maxWidth, width);
-                    //
-                    //             return true;
-                    //         }
-                    //     })
-                    //
-                    //     // Convert each key to srcset entry.
-                    //     .map(key => `${urls[key]} ${key}w`)
-                    //
-                    //     // Join all entries.
-                    //     .join(', ');
-                    //
-                    // if (srcsetAttribute !== '') {
-                    //     writer.setAttribute('srcset', {
-                    //         data: srcsetAttribute,
-                    //         width: maxWidth
-                    //     }, imageElement);
-                    // }
-
-                    // Insert the image in the current selection location.
                     editor.model.insertContent(imageElement, editor.model.document.selection);
                 });
 
@@ -393,6 +380,7 @@
         destroyed() {
             document.removeEventListener("selectImage", () => {
             });
+            window.ckEditorParams = null;
         },
     }
 </script>
