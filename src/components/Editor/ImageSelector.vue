@@ -204,7 +204,7 @@
         },
         methods: {
             fetchObjectImages() {
-                window.axios.post('/images/object', {
+                window.axios.post('/images/associations', {
                     model: this.model,
                     modelId: this.modelId
                 }).then(response => {
