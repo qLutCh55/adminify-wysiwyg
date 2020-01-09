@@ -3,7 +3,7 @@
         <v-card-text v-if="!loading">
             <ckeditor
                 class="ck-editor-border"
-                :disabled="!editable"
+                :disabled="!editable || loadingFileUrl"
                 :editor="editor"
                 v-model="editorData"
                 :config="editorConfig"
@@ -84,6 +84,8 @@
                 selectImageDialog: false,
                 selectFileDialog: false,
                 showOptionsDialog: false,
+
+                loadingFileUrl: false,
 
                 tmpEditor: null,
 
@@ -414,12 +416,20 @@
             selectFile(file) {
                 let editor = this.tmpEditor;
 
-                const fileUrl = file.url
-                const fileName = file.basename;
+                this.loadingFileUrl = true;
 
-                editor.model.change(writer => {
-                    const insertPosition = editor.model.document.selection.getFirstPosition();
-                    writer.insertText(fileName, {linkHref: fileUrl}, insertPosition);
+                window.axios.post('/files/public', {
+                    id: file.id,
+                }).then(response => {
+                    const fileUrl = response.data.url;
+                    const fileName = file.basename;
+
+                    editor.model.change(writer => {
+                        const insertPosition = editor.model.document.selection.getFirstPosition();
+                        writer.insertText(fileName, {linkHref: fileUrl}, insertPosition);
+                    });
+
+                    this.loadingFileUrl = false;
                 });
 
                 this.closeFileDialog();
