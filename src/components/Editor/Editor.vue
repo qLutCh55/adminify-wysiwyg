@@ -16,6 +16,13 @@
             @select="selectImage"
             @close="closeImageDialog"
         ></image-selector>
+        <file-selector
+            :model="model"
+            :modelId="modelId"
+            v-if="selectFileDialog"
+            @select="selectFile"
+            @close="closeFileDialog"
+        ></file-selector>
     </v-card>
 </template>
 <script>
@@ -50,8 +57,10 @@
 
     import UploadAdapter from './upload-adapter';
     import InsertImage from './insert-image';
+    import InsertFile from './insert-file';
 
     import ImageSelector from './ImageSelector';
+    import FileSelector from './FileSelector';
 
     function UploadAdapterPlugin(editor) {
         editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
@@ -63,12 +72,17 @@
         return new InsertImage(editor);
     }
 
+    function InsertFilePlugin(editor) {
+        return new InsertFile(editor);
+    }
+
     export default {
         data() {
             return {
                 loading: true,
 
                 selectImageDialog: false,
+                selectFileDialog: false,
                 showOptionsDialog: false,
 
                 tmpEditor: null,
@@ -105,7 +119,8 @@
                         TableToolbar,
                         MediaEmbed,
                         UploadAdapterPlugin,
-                        InsertImagePlugin
+                        InsertImagePlugin,
+                        InsertFilePlugin,
                     ],
 
                     fontSize: {
@@ -273,6 +288,7 @@
                             '|',
                             'link',
                             'insertImage',
+                            'insertFile',
                             'blockQuote',
                             'mediaEmbed',
                             'insertTable',
@@ -314,7 +330,8 @@
             }
         },
         components: {
-            ImageSelector
+            ImageSelector,
+            FileSelector,
         },
         name: 'Editor',
         watch: {
@@ -334,6 +351,10 @@
                 this.showImageDialog(e.detail);
             });
 
+            document.addEventListener("selectFile", (e) => {
+                this.showFileDialog(e.detail);
+            });
+
             window.ckEditorParams = {
                 model: this.model,
                 modelId: this.modelId
@@ -349,10 +370,12 @@
         },
         methods: {
             showImageDialog(editor) {
+                this.$store.dispatch('application/disableMainScroll');
                 this.tmpEditor = editor;
                 this.selectImageDialog = true;
             },
             closeImageDialog() {
+                this.$store.dispatch('application/enableMainScroll');
                 this.selectImageDialog = false;
                 this.tmpEditor = null;
             },
@@ -375,10 +398,37 @@
                 });
 
                 this.closeImageDialog();
+            },
+
+
+            showFileDialog(editor) {
+                this.$store.dispatch('application/disableMainScroll');
+                this.tmpEditor = editor;
+                this.selectFileDialog = true;
+            },
+            closeFileDialog() {
+                this.$store.dispatch('application/enableMainScroll');
+                this.selectFileDialog = false;
+                this.tmpEditor = null;
+            },
+            selectFile(file) {
+                let editor = this.tmpEditor;
+
+                const fileUrl = file.url
+                const fileName = file.basename;
+
+                editor.model.change(writer => {
+                    const insertPosition = editor.model.document.selection.getFirstPosition();
+                    writer.insertText(fileName, {linkHref: fileUrl}, insertPosition);
+                });
+
+                this.closeFileDialog();
             }
         },
         destroyed() {
             document.removeEventListener("selectImage", () => {
+            });
+            document.removeEventListener("selectFile", () => {
             });
             window.ckEditorParams = null;
         },

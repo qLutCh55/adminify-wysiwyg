@@ -196,10 +196,16 @@
             }
 
             window.axios.post('/images/searchPaginated?page=' + this.page).then(response => {
-                this.page++;
-                this.fetchingImages = false;
-                this.images = response.data.images.data;
-                this.thereIsMoreImages = true;
+                if (response.data.images.total > 0) {
+                    this.page++;
+                    this.fetchingImages = false;
+                    this.images = response.data.images.data;
+                    this.thereIsMoreImages = true;
+                } else {
+                    this.fetchingImages = false;
+                    this.thereIsMoreImages = false;
+                    this.noImagesFound = false;
+                }
             });
         },
         methods: {

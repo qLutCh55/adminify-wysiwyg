@@ -1,7 +1,7 @@
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import imageIcon from '@ckeditor/ckeditor5-core/theme/icons/image.svg';
+import fileIcon from '@ckeditor/ckeditor5-media-embed/theme/icons/media-placeholder.svg';
 
-export default class InsertImage {
+export default class InsertFile {
     constructor(editor) {
         this.editor = editor;
     }
@@ -9,18 +9,18 @@ export default class InsertImage {
     init() {
         const editor = this.editor;
 
-        editor.ui.componentFactory.add('insertImage', locale => {
+        editor.ui.componentFactory.add('insertFile', locale => {
             const view = new ButtonView(locale);
 
             view.set({
-                label: 'Insert image',
-                icon: imageIcon,
+                label: 'Insert file',
+                icon: fileIcon,
                 tooltip: true
             });
 
             // Callback executed once the image is clicked.
             view.on('execute', () => {
-                let event = new CustomEvent('selectImage', {'detail': editor});
+                let event = new CustomEvent('selectFile', {'detail': editor});
                 document.dispatchEvent(event);
             });
 
