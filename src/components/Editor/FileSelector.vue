@@ -26,30 +26,57 @@
                         </h2>
                         <v-card>
                             <v-card-text class="pa-3">
-                                <v-layout wrap>
-                                    <v-flex
-                                        v-for="(file, index) in objectFiles"
-                                        :key="index"
-                                        xs12 sm4 md3
-                                        class="d-flex child-flex"
-                                    >
-                                        <v-card
-                                            flat
-                                            tile
+                                <v-simple-table>
+                                    <template v-slot:default>
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center"></th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Size</th>
+                                            <th class="text-center">Extension</th>
+                                            <th class="text-center">Public</th>
+                                            <th class="text-center">Details</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr
+                                            v-for="(file, index) in objectFiles"
+                                            :key="index"
                                             @click="selectFile(file)"
                                             class="pointer"
                                         >
-                                            <div class="v-responsive-icon">
-                                                <v-icon>
-                                                    {{ getFileIcon(file) }}
-                                                </v-icon>
-                                            </div>
-                                            <div class="px-2">
+                                            <td class="text-center">
+                                                <v-icon size="30">{{ getFileIcon(file) }}</v-icon>
+                                            </td>
+                                            <td class="text-center">
                                                 {{ file.basename }}
-                                            </div>
-                                        </v-card>
-                                    </v-flex>
-                                </v-layout>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ humanFileSize(file.size) }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ file.extension }}
+                                            </td>
+                                            <td class="text-center">
+                                                <template v-if="file.public">
+                                                    <v-icon color="success">
+                                                        mdi-check-decagram
+                                                    </v-icon>
+                                                </template>
+                                                <template v-else>
+                                                    <v-icon color="error">
+                                                        mdi-close-circle
+                                                    </v-icon>
+                                                </template>
+                                            </td>
+                                            <td class="text-center">
+                                                Uploaded at: {{ file.created_at|date }} <br>
+                                                {{ file.created_at|fromNow }}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </template>
+                                </v-simple-table>
                             </v-card-text>
                         </v-card>
                     </v-flex>
@@ -99,27 +126,58 @@
                                 </v-card-title>
                                 <v-card-text class="pa-3">
                                     <v-layout wrap>
-                                        <v-flex
-                                            v-for="(file, index) in files"
-                                            :key="index"
-                                            xs12 sm4 md3
-                                            class="d-flex child-flex"
-                                        >
-                                            <v-card
-                                                flat
-                                                tile
-                                                @click="selectFile(file)"
-                                                class="pointer"
-                                            >
-                                                <div class="v-responsive-icon">
-                                                    <v-icon>
-                                                        {{ getFileIcon(file) }}
-                                                    </v-icon>
-                                                </div>
-                                                <div class="px-2">
-                                                    {{ file.basename }}
-                                                </div>
-                                            </v-card>
+                                        <v-flex xs12>
+                                            <v-simple-table>
+                                                <template v-slot:default>
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center"></th>
+                                                        <th class="text-center">Name</th>
+                                                        <th class="text-center">Size</th>
+                                                        <th class="text-center">Extension</th>
+                                                        <th class="text-center">Public</th>
+                                                        <th class="text-center">Details</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr
+                                                        v-for="(file, index) in files"
+                                                        :key="index"
+                                                        @click="selectFile(file)"
+                                                        class="pointer"
+                                                    >
+                                                        <td class="text-center">
+                                                            <v-icon size="30">{{ getFileIcon(file) }}</v-icon>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ file.basename }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ humanFileSize(file.size) }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ file.extension }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <template v-if="file.public">
+                                                                <v-icon color="success">
+                                                                    mdi-check-decagram
+                                                                </v-icon>
+                                                            </template>
+                                                            <template v-else>
+                                                                <v-icon color="error">
+                                                                    mdi-close-circle
+                                                                </v-icon>
+                                                            </template>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            Uploaded at: {{ file.created_at|date }} <br>
+                                                            {{ file.created_at|fromNow }}
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </template>
+                                            </v-simple-table>
                                         </v-flex>
                                         <v-flex xs12 class="text-center mt-2" v-if="noFilesFound && !fetchingFiles">
                                             <p class="red--text">Could not find any files...</p>
