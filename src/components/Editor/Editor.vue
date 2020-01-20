@@ -387,7 +387,7 @@
                 let extension = image.type;
 
                 let urls = {
-                    default: window.location.protocol + '//' + window.location.host + '/images/' + hash + '.' + extension
+                    default: '/images/' + hash + '.' + extension
                 };
 
                 editor.model.change(writer => {

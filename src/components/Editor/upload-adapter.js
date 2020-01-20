@@ -65,7 +65,7 @@ export default class UploadAdapter {
             let extension = response.image.type;
 
             response.urls = {
-                default: window.location.protocol + '//' + window.location.host + '/images/' + hash + '.' + extension
+                default: '/images/' + hash + '.' + extension
             };
 
             resolve(response.urls);
