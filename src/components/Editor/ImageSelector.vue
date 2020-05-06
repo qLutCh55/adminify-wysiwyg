@@ -8,7 +8,7 @@
         <v-card style="min-height: 100%;">
             <v-toolbar dark color="primary">
                 <v-btn icon dark @click="closeImageSelect">
-                    <v-icon>mdi-close</v-icon>
+                    <v-icon>$mdiClose</v-icon>
                 </v-btn>
                 <v-toolbar-title>Images</v-toolbar-title>
                 <v-spacer></v-spacer>

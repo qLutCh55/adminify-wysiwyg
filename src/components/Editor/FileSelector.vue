@@ -8,7 +8,7 @@
         <v-card style="min-height: 100%;">
             <v-toolbar dark color="primary">
                 <v-btn icon dark @click="closeFileSelect">
-                    <v-icon>mdi-close</v-icon>
+                    <v-icon>$mdiClose</v-icon>
                 </v-btn>
                 <v-toolbar-title>Files</v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -60,12 +60,12 @@
                                             <td class="text-center">
                                                 <template v-if="file.public">
                                                     <v-icon color="success">
-                                                        mdi-check-decagram
+                                                        $mdiCheckDecagram
                                                     </v-icon>
                                                 </template>
                                                 <template v-else>
                                                     <v-icon color="error">
-                                                        mdi-close-circle
+                                                        $mdiCloseCircle
                                                     </v-icon>
                                                 </template>
                                             </td>
@@ -161,12 +161,12 @@
                                                         <td class="text-center">
                                                             <template v-if="file.public">
                                                                 <v-icon color="success">
-                                                                    mdi-check-decagram
+                                                                    $mdiCheckDecagram
                                                                 </v-icon>
                                                             </template>
                                                             <template v-else>
                                                                 <v-icon color="error">
-                                                                    mdi-close-circle
+                                                                    $mdiCloseCircle
                                                                 </v-icon>
                                                             </template>
                                                         </td>
