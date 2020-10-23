@@ -1,6 +1,6 @@
 {
   "name": "adminify-wysiwyg",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Additional package for Laravel Adminify",
   "license": "MIT",
   "repository": "qLutCh55/adminify-wysiwyg",

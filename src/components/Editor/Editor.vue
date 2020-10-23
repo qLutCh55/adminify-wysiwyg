@@ -54,6 +54,7 @@
     import Table from '@ckeditor/ckeditor5-table/src/table';
     import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
     import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
+    import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 
     import UploadAdapter from './upload-adapter';
     import InsertImage from './insert-image';
@@ -120,6 +121,8 @@
                         Table,
                         TableToolbar,
                         MediaEmbed,
+                        PasteFromOffice,
+                        
                         UploadAdapterPlugin,
                         InsertImagePlugin,
                         InsertFilePlugin,
