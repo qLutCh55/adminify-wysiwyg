@@ -1,6 +1,6 @@
 {
   "name": "adminify-wysiwyg",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Additional package for Laravel Adminify",
   "license": "MIT",
   "repository": "qLutCh55/adminify-wysiwyg",
@@ -30,6 +30,7 @@
     "@ckeditor/ckeditor5-list": "^16.0.0",
     "@ckeditor/ckeditor5-media-embed": "^16.0.0",
     "@ckeditor/ckeditor5-paragraph": "^16.0.0",
+    "@ckeditor/ckeditor5-paste-from-office": "^16.0.0",
     "@ckeditor/ckeditor5-remove-format": "^16.0.0",
     "@ckeditor/ckeditor5-table": "^16.0.0",
     "@ckeditor/ckeditor5-theme-lark": "^16.0.0",
