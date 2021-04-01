@@ -37,6 +37,10 @@ export default class UploadAdapter {
 
     // Initializes XMLHttpRequest listeners.
     _initListeners(resolve, reject, file) {
+        if (file.type !== 'image/jpeg' || file.type !== 'image/png' || file.type !== 'image/jpg') {
+            reject('Image is not a jpeg or png.');
+        }
+        
         const xhr = this.xhr;
         const loader = this.loader;
         const genericErrorText = `Couldn't upload file: ${file.name}.`;
